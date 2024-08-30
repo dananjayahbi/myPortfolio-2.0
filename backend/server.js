@@ -16,7 +16,7 @@ app.get('/', (req, res) => {
     res.send('Hello World!');
 });
 
-// app.use("/api/users", require("./routes/user.routes"));
+app.use("/api/admin", require("./routes/user.routes"));
 
 dbConfig();
 
