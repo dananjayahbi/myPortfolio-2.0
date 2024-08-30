@@ -6,40 +6,34 @@ import AdminLogin from "./pages/adminPages/adminLogin";
 import SiteSettings from "./pages/adminPages/SiteSettings";
 import "./App.css";
 
-// Custom PrivateRoute component
-const PrivateRoute = ({ children }) => {
-  const isLogged = window.sessionStorage.getItem("LoggedIn");
-
-  return isLogged === true ? children : <Navigate to="/admin/login" />;
-};
-
 const App = () => {
+  const isLogged = window.sessionStorage.getItem("LoggedIn");
   return (
     <>
       <Routes>
         <Route path="/" element={<Home />} />
+        {isLogged ? (
+          <>
+            <Route path="/admin" element={<AdminDashboard />} />
+          </>
+        ) : (
+          <>
+            <Route path="/admin" element={<Navigate to="/admin/login" />} />
+          </>
+        )}
+        {isLogged ? (
+          <>
+            <Route path="/admin/siteSettings" element={<SiteSettings />} />
+          </>
+        ) : (
+          <>
+            <Route
+              path="/admin/siteSettings"
+              element={<Navigate to="/admin/login" />}
+            />
+          </>
+        )}
 
-        {/* Protecting /admin routes */}
-        <Route
-          path="/admin"
-          element={
-            <PrivateRoute>
-              <AdminDashboard />
-            </PrivateRoute>
-          }
-        />
-
-        {/* Protecting /admin/siteSettings route */}
-        <Route
-          path="/admin/siteSettings"
-          element={
-            <PrivateRoute>
-              <SiteSettings />
-            </PrivateRoute>
-          }
-        />
-
-        {/* Admin login route */}
         <Route path="/admin/login" element={<AdminLogin />} />
       </Routes>
     </>
